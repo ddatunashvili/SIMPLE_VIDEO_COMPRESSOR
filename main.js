@@ -21,7 +21,7 @@ app.on("ready", () => {
       nodeIntegration: false,
     },
   });
-// mainWindow.removeMenu();
+mainWindow.removeMenu();
   mainWindow.loadFile("index.html");
 });
 
