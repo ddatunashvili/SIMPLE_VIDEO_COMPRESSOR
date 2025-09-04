@@ -1,0 +1,34 @@
+{
+  "name": "video-compressor",
+  "version": "1.0.0",
+  "description": "ვიდეო კომპრესირების აპლიკაცია",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "main.js",
+  "scripts": {
+    "dev": "electron .",
+    "build": "electron-builder"
+  },
+
+  "devDependencies": {
+    "electron-builder": "^26.0.12"
+  },
+    "build": {
+    "appId": "com.ddatunashvili.video-compressor",
+    "productName": "ვიდეო კომპრესირების აპლიკაცია",
+    "files": [
+      "**/*",
+            "ffmpeg/**/*"
+    ],
+    "win": {
+      "icon": "icon.png"
+    },
+    "mac": {
+      "icon": "icon.png"
+    },
+    "linux": {
+      "icon": "icon.png"
+    }
+  }
+}
