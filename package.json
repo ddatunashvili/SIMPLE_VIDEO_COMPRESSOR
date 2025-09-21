@@ -10,17 +10,24 @@
     "dev": "electron .",
     "build": "electron-builder"
   },
-
   "devDependencies": {
+    "electron": "^38.1.2",
     "electron-builder": "^26.0.12"
   },
-    "build": {
+  "build": {
     "appId": "com.ddatunashvili.video-compressor",
     "productName": "ვიდეო კომპრესირების აპლიკაცია",
     "files": [
-      "**/*",
-            "ffmpeg/**/*"
+      "**/*"
     ],
+    "extraResources": [
+      {
+        "from": "ffmpeg/",
+        "to": "ffmpeg",
+        "filter": ["**/*"]
+      }
+    ],
+    "asar": true,
     "win": {
       "icon": "icon.png"
     },
