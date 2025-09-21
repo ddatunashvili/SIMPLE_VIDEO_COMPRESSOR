@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self';">
     <title>ვიდეო კომპრესორი</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -11,11 +13,11 @@
 <body>
     <h1>ვიდეო კომპრესორი</h1>
 
-    <!-- Drag & Drop -->
-    <div id="drop-area">
-        <p>ჩააგდეთ თქვენი ვიდეო ან დააჭირეთ ფაილის ასარჩევად</p>
-        <input type="file" id="fileElem" accept="video/*" hidden>
+    <!-- File Selection Button -->
+    <div id="file-selection">
+        <button id="select-file-btn">📁 აირჩიეთ ვიდეო ფაილი კომპრესიისთვის</button>
     </div>
+
     <!-- Progress -->
     <div id="progress-container" class="hidden">
         <progress id="progress-bar" value="0" max="100"></progress>
@@ -24,23 +26,23 @@
         <p id="current-size-text"></p>
         <!-- Cancel Button -->
         <div id="cancel-container" class="hidden">
-            <button id="cancelBtn" class="cancel-btn">❌ გააუქმე კომპრესია</button>
+            <button id="cancelBtn" class="cancel-btn">❌ გააუქე კომპრესია</button>
         </div>
     </div>
 
     <!-- Output -->
- <div id="output" class="hidden">
-    <p>✅ ფაილი მზადაა:</p>
-    <a id="output-link" href="#" target="_blank"></a>
-    <button id="show-in-folder">📂 ვიდეო ფაილის ნახვა</button>
-    <p id="final-size"></p>
-</div>
-
+    <div id="output" class="hidden">
+        <p>✅ ფაილი მზადაა:</p>
+        <a id="output-link" href="#" target="_blank"></a>
+        <button id="show-in-folder">📂 ვიდეო ფაილის ნახვა</button>
+        <p id="final-size"></p>
+    </div>
 
     <!-- Main Content (Options + Guide) -->
     <div class="main-content">
         <!-- Options -->
         <div id="options">
+            <!-- Video Encoder -->
             <label>
                 <strong>1. ვიდეო ენკოდერი:</strong>
                 <select id="video-encoder">
@@ -51,6 +53,7 @@
                     იყოს.</span>
             </label>
 
+            <!-- Method -->
             <label>
                 <strong>2. ხარისხის მეთოდი:</strong>
                 <select id="method">
@@ -60,18 +63,21 @@
                 <span class="note">აირჩიეთ CRF ხარისხისთვის ან ბითრეითი ფაილის ზომისათვის.</span>
             </label>
 
+            <!-- CRF -->
             <label>
                 <strong>3. CRF:</strong>
                 <input type="number" id="crf" value="28">
                 <span class="note">დაბალი CRF = მაღალი ხარისხი და დიდი ფაილი. რეკომენდებული დიაპაზონი: 18-30.</span>
             </label>
 
+            <!-- Bitrate -->
             <label>
                 <strong>4. ბითრეითი (kbps):</strong>
                 <input type="number" id="bitrate" value="1000">
                 <span class="note">ბითრეითი გამოიყენება საშუალო ბითრეითის მეთოდში. მაღალი = უკეთესი ხარისხი.</span>
             </label>
 
+            <!-- Preset -->
             <label>
                 <strong>5. პრესეტი:</strong>
                 <select id="preset">
@@ -85,6 +91,7 @@
                     ფაილი.</span>
             </label>
 
+            <!-- Resolution -->
             <label>
                 <strong>6. რეზოლუცია:</strong>
                 <select id="resolution">
@@ -94,16 +101,17 @@
                     <option value="854:-2">480p</option>
                     <option value="640:-2">360p</option>
                 </select>
-                <span class="note">აირჩიეთ გამოსახულების სიგანე/სიმაღლე. -2 ინარჩუნებს aspect ration-ს.</span>
+                <span class="note">აირჩიეთ გამოსახულების სიგანე/სიმაღლე. -2 ინარჩუნებს aspect ratio-ს.</span>
             </label>
 
+            <!-- Framerate -->
             <label>
                 <strong>7. კადრის სიხშირე:</strong>
                 <input type="number" id="framerate" placeholder="გაატოვეთ როგორც წყარო">
-                <span class="note">გააკონტროლეთ FPS. გაცილებით დაბალი მნიშვნელობა = ნაკლები ზომა ან დატოვეთ ცარიელი,
-                    ორიგინალი FPS ის შესანარჩუნებლად</span>
+                <span class="note">გააკონტროლეთ FPS. დაბალი მნიშვნელობა = ნაკლები ზომა ან დატოვეთ ცარიელი, ორიგინალი FPS-ის შესანარჩუნებლად</span>
             </label>
 
+            <!-- Audio Bitrate -->
             <label>
                 <strong>8. აუდიო ბითრეითი:</strong>
                 <select id="audio-bitrate">
@@ -135,7 +143,7 @@
         </div>
     </div>
 
-<div id="toast-container"></div>
+    <div id="toast-container"></div>
 
     <script src="renderer.js"></script>
 </body>

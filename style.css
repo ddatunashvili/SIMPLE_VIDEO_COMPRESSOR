@@ -21,27 +21,37 @@ h1 {
   text-align: center;
 }
 
-/* --- Drop Area --- */
-#drop-area {
+/* --- File Selection Button --- */
+#file-selection {
   width: 100%;
   max-width: 1200px;
-
-  border: 2px dashed #bb86fc;
-  border-radius: 12px;
   text-align: center;
-  transition: background-color 0.3s, border-color 0.3s;
+  margin-bottom: 20px;
+}
+
+#select-file-btn {
+  background-color: #8a4fc1; /* darker purple */
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 1rem;
   cursor: pointer;
- 
+  font-weight: bold;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
-#drop-area.highlight {
-  background-color: rgba(187, 134, 252, 0.2);
-  border-color: #bb86fc;
+#select-file-btn:hover {
+  background-color: #733aa3; /* darker hover */
+  transform: translateY(-2px);
 }
 
-#drop-area p {
-  font-size: 1.1rem;
+#select-file-btn:disabled {
+  background-color: #555; /* slightly darker disabled */
+  cursor: not-allowed;
+  transform: none;
 }
+
 
 /* --- Main Content Layout --- */
 .main-content {
@@ -131,7 +141,6 @@ label .note {
   width: 100%;
   max-width: 1200px;
   background-color: #1e1e1e;
-
   border-radius: 10px;
   text-align: center;
   box-shadow: 0 0 10px rgba(187, 134, 252, 0.3);
@@ -188,11 +197,12 @@ input, select {
     flex: 1 1 100%;
     width: 100%;
   }
-  
-  #drop-area, #progress-container, #output {
+
+  #file-selection, #progress-container, #output {
     width: 100%;
   }
 }
+
 #cancel-container {
   margin-top: 15px;
   text-align: center;
@@ -218,8 +228,6 @@ input, select {
   background-color: #888;
   cursor: not-allowed;
 }
-
-
 
 /* Toast container */
 #toast-container {
@@ -264,6 +272,7 @@ input, select {
     transform: translateY(20px);
   }
 }
+
 #output {
   margin-top: 20px;
   text-align: center;
@@ -280,12 +289,13 @@ input, select {
 #output-link:hover {
   text-decoration: underline;
 }
+
 #show-in-folder {
-  background-color: #bb86fc; /* purple like your title */
+  background-color: #bb86fc;
   color: white;
   border: none;
   padding: 8px 16px;
-  margin: 5px 0 0 10px; /* top 5px, left 10px */
+  margin: 5px 0 0 10px;
   border-radius: 8px;
   cursor: pointer;
   font-size: 14px;
@@ -294,8 +304,8 @@ input, select {
 }
 
 #show-in-folder:hover {
-  background-color: #9a64d6; /* slightly darker purple on hover */
-  transform: translateY(-2px); /* subtle lift effect */
+  background-color: #9a64d6;
+  transform: translateY(-2px);
 }
 
 #show-in-folder:disabled {

@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog, shell } = require("electron");
+const { app, BrowserWindow, ipcMain, dialog,shell } = require("electron");
 const path = require("path");
 const { spawnSync, spawn } = require("child_process");
 const fs = require("fs");
@@ -6,31 +6,14 @@ const fs = require("fs");
 let mainWindow;
 const activeProcesses = new Map(); // Track running ffmpeg jobs
 
-// ----------------------------
-// FFmpeg / FFprobe path resolve
-// ----------------------------
-const isDev = !app.isPackaged;
-
-function getFfmpegPath() {
-  const ffmpegExecutable = process.platform === "win32" ? "ffmpeg.exe" : "ffmpeg";
-  return isDev
-    ? path.join(__dirname, "ffmpeg", ffmpegExecutable) // dev-ში
-    : path.join(process.resourcesPath, "ffmpeg", ffmpegExecutable); // build-ში
-}
-
-function getFfprobePath() {
-  const ffprobeExecutable = process.platform === "win32" ? "ffprobe.exe" : "ffprobe";
-  return isDev
-    ? path.join(__dirname, "ffmpeg", ffprobeExecutable)
-    : path.join(process.resourcesPath, "ffmpeg", ffprobeExecutable);
-}
-
 app.on("ready", () => {
   mainWindow = new BrowserWindow({
     width: 1500,
     height: 1000,
     resizable: true,
-    icon: path.join(__dirname, "icon.png"),
+    // alwaysOnTop: true,
+    icon: path.join(__dirname, "icon.png"), // ✅ Your icon path
+
     title: "ვიდეო კომპრესორი",
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
@@ -38,7 +21,7 @@ app.on("ready", () => {
       nodeIntegration: false,
     },
   });
-  mainWindow.removeMenu();
+mainWindow.removeMenu();
   mainWindow.loadFile("index.html");
 });
 
@@ -71,10 +54,10 @@ function getAvailableFilename(filePath) {
 }
 
 // ----------------------------
-// GPU detection
+// GPU detection (optional, fallback to CPU)
 // ----------------------------
 function detectNvenc() {
-  const result = spawnSync(getFfmpegPath(), ["-encoders"]);
+  const result = spawnSync("ffmpeg", ["-encoders"]);
   if (result.error) return {};
   const output = result.stdout.toString() + result.stderr.toString();
   return {
@@ -121,19 +104,16 @@ ipcMain.on("compress-video", (event, options) => {
   const safeBitrate = bitrate || 1000;
 
   if (isNvenc) {
-    const nvencPresets = [
-      "default","slow","medium","fast","hp","hq","bd","ll","llhq","llhp","lossless"
-    ];
+    const nvencPresets = ["default","slow","medium","fast","hp","hq","bd","ll","llhq","llhp","lossless"];
     ffmpegArgs.push("-preset", nvencPresets.includes(preset) ? preset : "default");
 
     if (method === "CRF") ffmpegArgs.push("-cq", safeCRF);
-    else {
+    else
       ffmpegArgs.push(
         "-b:v", `${safeBitrate}k`,
         "-maxrate", `${Math.floor(safeBitrate * 1.1)}k`,
         "-bufsize", `${safeBitrate * 2}k`
       );
-    }
   } else {
     if (method === "CRF") ffmpegArgs.push("-crf", safeCRF);
     else ffmpegArgs.push("-b:v", `${safeBitrate}k`);
@@ -145,12 +125,12 @@ ipcMain.on("compress-video", (event, options) => {
   ffmpegArgs.push("-c:a", "aac", "-b:a", audioBitrate || "128k");
   ffmpegArgs.push("-movflags", "+faststart", outputPath);
 
-  console.log("FFMPEG CMD:", [getFfmpegPath(), ...ffmpegArgs].join(" "));
+  console.log("FFMPEG CMD:", ["ffmpeg", ...ffmpegArgs].join(" "));
 
-  // Get duration with ffprobe
+  // Get duration
   let duration = 0;
   try {
-    const durResult = spawnSync(getFfprobePath(), [
+    const durResult = spawnSync("ffprobe", [
       "-v", "error",
       "-show_entries", "format=duration",
       "-of", "default=noprint_wrappers=1:nokey=1",
@@ -163,7 +143,7 @@ ipcMain.on("compress-video", (event, options) => {
 
   const startTime = Date.now();
 
-  const ffmpeg = spawn(getFfmpegPath(), ffmpegArgs);
+  const ffmpeg = spawn("ffmpeg", ffmpegArgs);
   activeProcesses.set(filePath, { process: ffmpeg, outputPath }); // track it
 
   ffmpeg.stderr.on("data", (data) => {
@@ -205,6 +185,7 @@ ipcMain.on("compress-video", (event, options) => {
       } catch {}
       event.reply("compression-complete", { path: outputPath, size: finalSize });
     } else if (code === null) {
+      // canceled manually
       try { if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath); } catch {}
       event.reply("compression-canceled");
     } else {

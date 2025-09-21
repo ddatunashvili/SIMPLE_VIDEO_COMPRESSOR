@@ -1,4 +1,3 @@
-const dropArea = document.getElementById("drop-area");
 const fileElem = document.getElementById("fileElem");
 const progressContainer = document.getElementById("progress-container");
 const progressBar = document.getElementById("progress-bar");
@@ -25,30 +24,9 @@ const framerateInput = document.getElementById("framerate");
 const audioBitrateSelect = document.getElementById("audio-bitrate");
 
 // ----------------------
-// Drag & Drop
-// ----------------------
-["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
-  dropArea.addEventListener(eventName, e => e.preventDefault());
-});
-
-["dragenter", "dragover"].forEach(eventName => {
-  dropArea.classList.add("highlight");
-});
-
-["dragleave", "drop"].forEach(eventName => {
-  dropArea.classList.remove("highlight");
-});
-
-dropArea.addEventListener("drop", e => {
-  const file = e.dataTransfer.files[0];
-  if (file && file.path) handleFile(file.path);
-  else showToast("⚠️ ფაილის მისამართი ვერ მოიძებნა","info");
-});
-
-// ----------------------
 // Click to open file dialog
 // ----------------------
-dropArea.addEventListener("click", async () => {
+document.getElementById("select-file-btn").addEventListener("click", async () => {
   const filePath = await window.electronAPI.openFileDialog();
   if (filePath) handleFile(filePath);
 });
@@ -62,7 +40,7 @@ async function handleFile(filePath) {
 
   // Reset UI
   progressContainer.classList.remove("hidden");
-  cancelContainer.classList.remove("hidden"); // show cancel
+  cancelContainer.classList.remove("hidden");
   cancelBtn.disabled = false;
 
   progressBar.value = 0;
@@ -119,7 +97,7 @@ window.electronAPI.onProgress(({ percent, remainingTime, currentSize }) => {
 
 window.electronAPI.onComplete(({ path, size }) => {
   progressContainer.classList.add("hidden");
-  cancelContainer.classList.add("hidden"); // hide cancel
+  cancelContainer.classList.add("hidden");
   outputDiv.classList.remove("hidden");
 
   outputLink.textContent = path;
@@ -131,7 +109,7 @@ window.electronAPI.onComplete(({ path, size }) => {
 
 window.electronAPI.onError(error => {
   progressContainer.classList.add("hidden");
-  cancelContainer.classList.add("hidden"); // hide cancel
+  cancelContainer.classList.add("hidden");
   showToast("❌ კომპრესია ვერ მოხდა: " + error, "error");
 });
 
@@ -152,7 +130,9 @@ window.electronAPI.onCanceled(() => {
   showToast("❌ კომპრესია გაუქმდა","error");
 });
 
-
+// ----------------------
+// Toast messages
+// ----------------------
 function showToast(message, type = "info", duration = 3000) {
   const container = document.getElementById("toast-container");
 
@@ -162,15 +142,16 @@ function showToast(message, type = "info", duration = 3000) {
 
   container.appendChild(toast);
 
-  // Remove after duration
   setTimeout(() => {
     toast.style.animation = "fadeOut 0.5s forwards";
     toast.addEventListener("animationend", () => toast.remove());
   }, duration);
 }
 
+// ----------------------
+// Show in folder
+// ----------------------
 const showButton = document.getElementById("show-in-folder");
-
 showButton.addEventListener("click", () => {
   const filePath = outputLink.textContent;
   if (filePath) {
