@@ -1,0 +1,315 @@
+/* --- General --- */
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #121212;
+  color: #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  gap: 20px;
+  overflow: hidden;
+}
+
+/* --- Heading --- */
+h1 {
+  margin: 10px 0;
+  font-size: 2rem;
+  color: #bb86fc;
+  text-align: center;
+}
+
+/* --- File Selection Button --- */
+#file-selection {
+  width: 100%;
+  max-width: 1200px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#select-file-btn {
+  background-color: #8a4fc1; /* darker purple */
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+#select-file-btn:hover {
+  background-color: #733aa3; /* darker hover */
+  transform: translateY(-2px);
+}
+
+#select-file-btn:disabled {
+  background-color: #555; /* slightly darker disabled */
+  cursor: not-allowed;
+  transform: none;
+}
+
+
+/* --- Main Content Layout --- */
+.main-content {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+  flex-wrap: wrap;
+}
+
+/* --- Options Panel --- */
+#options {
+  flex: 1 1 45%;
+  padding: 15px;
+  border-radius: 10px;
+  background-color: #1e1e1e;
+  box-shadow: 0 0 10px rgba(187, 134, 252, 0.3);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+#options label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
+  flex: 1 1 45%;
+  margin-bottom: 10px;
+  color: #ddd;
+}
+
+#options select,
+#options input {
+  margin-top: 5px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+  font-size: 0.9rem;
+}
+
+#options select:focus,
+#options input:focus {
+  outline: none;
+  border-color: #bb86fc;
+  box-shadow: 0 0 5px #bb86fc;
+}
+
+label .note {
+  color: #aaa;
+  font-size: 0.8rem;
+  margin-top: 3px;
+}
+
+/* --- Guide --- */
+#guide {
+  flex: 1 1 45%;
+  padding: 15px;
+  border-radius: 10px;
+  background-color: #1e1e1e;
+  color: #ccc;
+  font-family: sans-serif;
+  box-shadow: 0 0 10px rgba(187, 134, 252, 0.3);
+}
+
+#guide h2 {
+  color: #bb86fc;
+  margin-bottom: 10px;
+  font-size: 1.2em;
+}
+
+#guide ul {
+  line-height: 1.6;
+  padding-left: 20px;
+}
+
+#guide li {
+  margin-bottom: 6px;
+}
+
+/* --- Progress + Output --- */
+#progress-container,
+#output {
+  width: 100%;
+  max-width: 1200px;
+  background-color: #1e1e1e;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(187, 134, 252, 0.3);
+}
+
+progress {
+  width: 100%;
+  height: 20px;
+  border-radius: 10px;
+  appearance: none;
+  overflow: hidden;
+}
+
+progress::-webkit-progress-bar {
+  background-color: #2a2a2a;
+}
+
+progress::-webkit-progress-value {
+  background-color: #bb86fc;
+}
+
+progress::-moz-progress-bar {
+  background-color: #bb86fc;
+}
+
+#output a {
+  color: #bb86fc;
+  text-decoration: none;
+  font-weight: bold;
+  word-break: break-all;
+}
+
+#output a:hover {
+  text-decoration: underline;
+}
+
+/* --- Hidden --- */
+.hidden {
+  display: none;
+}
+
+/* --- Inputs & Selects Animation --- */
+input, select {
+  transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .main-content {
+    flex-direction: column;
+  }
+  
+  #options, #guide {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
+  #file-selection, #progress-container, #output {
+    width: 100%;
+  }
+}
+
+#cancel-container {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.cancel-btn {
+  background-color: #d9534f;
+  color: white;
+  font-weight: bold;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  font-size: 15px;
+}
+
+.cancel-btn:hover {
+  background-color: #c9302c;
+}
+
+.cancel-btn:disabled {
+  background-color: #888;
+  cursor: not-allowed;
+}
+
+/* Toast container */
+#toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Single toast */
+.toast {
+  background: #333;
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideIn 0.3s forwards;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+}
+
+/* Success, Error, Info */
+.toast.success { background: #28a745; }
+.toast.error   { background: #dc3545; }
+.toast.info    { background: #007bff; }
+
+/* Animations */
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+#output {
+  margin-top: 20px;
+  text-align: center;
+}
+
+#output-link {
+  display: inline-block;
+  margin: 8px 0;
+  color: #4a90e2;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+#output-link:hover {
+  text-decoration: underline;
+}
+
+#show-in-folder {
+  background-color: #bb86fc;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  margin: 5px 0 0 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+#show-in-folder:hover {
+  background-color: #9a64d6;
+  transform: translateY(-2px);
+}
+
+#show-in-folder:disabled {
+  background-color: #888;
+  cursor: not-allowed;
+  transform: none;
+}
